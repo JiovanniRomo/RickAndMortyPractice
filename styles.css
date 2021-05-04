@@ -1,0 +1,66 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+    background-color: #13293D;
+}
+
+main {
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: auto(1, auto);
+    justify-items: center;
+}
+
+main button {
+    border: 0;
+    font-size: 1.5rem;
+    padding: 20px;
+}
+
+main h1 {
+    color: #3E92CC;
+    font-family: 'Playfair Display';
+}
+
+.botones {
+    display: flex;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: grid;
+    grid-template-rows: auto(1, auto);
+    justify-items: center;
+    padding: 40px;
+    background-color: #3E92CC;
+
+}
+
+.info {
+    display: grid;
+    row-gap: 10px;
+    align-items: center;
+}
+
+.info h2 {
+    font-size: 2rem;
+}
+
+.info p {
+    font-size:1.5rem;
+}
