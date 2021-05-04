@@ -23,37 +23,11 @@ window.addEventListener('load', () => {
     //Peticion a la API
     const llamarPersonajes = async () => {
 
-        /* Llamada con axios y sin async/await
-            const { data } = await axios.get('https://rickandmortyapi.com/api/character');
-            
-            const [results] = data;
-            .then(response => {
-                const personajes = response.data.results;
-                crearCard(personajes);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
-            const {results: personajes} = data;
-        */
-
-
-        /* Ejemplo de llamada con fetch
-            const response = await fetch('https://rickandmortyapi.com/api/character');
-            const resultado = await response.json();
-
-            const {results} = resultado
-            console.log(results);
-        */
-
-
-        //Llamada a la API utilizando async/await
+        //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
         const { data: { results: personajes } } = await axios.get('https://rickandmortyapi.com/api/character');
-
         crearCard(personajes);
 
-    }
+    };
 
 
     //Mostrar resultados en el HTML
@@ -61,6 +35,8 @@ window.addEventListener('load', () => {
 
         //Asignacion de peropiedades por cada personaje
         personajes.map(personaje => {
+
+            const {location: {name: planeta}} = personaje;
 
             //crear el contenedor padre card
             const card = document.createElement('div');
@@ -86,12 +62,15 @@ window.addEventListener('load', () => {
             const specie = document.createElement('p');
             specie.textContent = `Specie: ${personaje.species}`
 
+            const planet = document.createElement('p');
+            planet.textContent = `Lives in: ${planeta}`
 
             //Agregar los nodos al padre
             card.appendChild(img);
             info.appendChild(h2);
             info.appendChild(status);
             info.appendChild(specie);
+            info.appendChild(planet);
             card.appendChild(info);
             cards.appendChild(card);
 
