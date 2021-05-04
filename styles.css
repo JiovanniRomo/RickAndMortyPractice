@@ -9,58 +9,64 @@ html {
 }
 
 body {
-    background-color: #13293D;
+  background-color: #13293d;
 }
 
 main {
-    width: 90%;
-    height: 100%;
-    margin: 0 auto;
-    display: grid;
-    grid-template-rows: auto(1, auto);
-    justify-items: center;
+  width: 90%;
+  height: 100%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto(1, auto);
+  justify-items: center;
+  color: white;
+  margin-top: 20px;
 }
 
 main button {
-    border: 0;
-    font-size: 1.5rem;
-    padding: 20px;
+  border: 0;
+  font-size: 1.5rem;
+  padding: 10px;
 }
 
 main h1 {
-    color: #3E92CC;
-    font-family: 'Playfair Display';
+  color: #3e92cc;
+  font-family: "Playfair Display";
 }
 
 .botones {
-    display: flex;
+  display: flex;
+  justify-content: space-between;
+  width: 50vw;
+  margin-top: 10px;
 }
 
 .cards {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .card {
-    display: grid;
-    grid-template-rows: auto(1, auto);
-    justify-items: center;
-    padding: 40px;
-    background-color: #3E92CC;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: #3e92cc;
+  margin-top: 20px;
 }
 
 .info {
-    display: grid;
-    row-gap: 10px;
-    align-items: center;
+  display: grid;
+  row-gap: 10px;
+  align-items: center;
 }
 
 .info h2 {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .info p {
-    font-size:1.5rem;
+  font-size: 1.5rem;
 }
