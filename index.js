@@ -1,31 +1,38 @@
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
 
 
     //Referencias al DOM
     const cards = document.querySelector('.cards');
     const callButton = document.querySelector('#llamado');
-    const deleteHTML = document.querySelector('#borrarLlamado');
-
+    // const deleteHTML = document.querySelector('#borrarLlamado');
+    const nombreInput = document.querySelector('.formulario--input #nombre');
+    
+    callButton.disabled = true;
 
     //listeners 
     cargarListeners();
 
     function cargarListeners() {
-        callButton.addEventListener('click', () => {
-            llamarPersonajes();
-        });
+        // callButton.addEventListener('click', () => {
+        //     llamadoPersonajes();
+        // });
 
-        deleteHTML.addEventListener('click', () => {
-            limpiarHTML();
-        })
+        // deleteHTML.addEventListener('click', () => {
+        //     limpiarHTML();
+        // });
+
+        nombreInput.addEventListener('blur', validarFormulario);
     };
 
     //Peticion a la API
-    const llamarPersonajes = async () => {
+    const llamarPersonajes = async (name) => {
+
+        console.log(name);
 
         //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
-        const { data: { results: personajes } } = await axios.get('https://rickandmortyapi.com/api/character');
+        const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
         crearCard(personajes);
+        // console.log(personajes);
 
     };
 
@@ -36,7 +43,8 @@ window.addEventListener('load', () => {
         //Asignacion de peropiedades por cada personaje
         personajes.map(personaje => {
 
-            const {location: {name: planeta}} = personaje;
+            const { location: { name: planeta }, episode } = personaje;
+            // const {episode} = personaje;
 
             //crear el contenedor padre card
             const card = document.createElement('div');
@@ -65,12 +73,16 @@ window.addEventListener('load', () => {
             const planet = document.createElement('p');
             planet.textContent = `Lives in: ${planeta}`
 
+            const episodios = document.createElement('p');
+            episodios.textContent = `Ha aparecido en: ${episode.length} episodios`
+
             //Agregar los nodos al padre
             card.appendChild(img);
             info.appendChild(h2);
             info.appendChild(status);
             info.appendChild(specie);
             info.appendChild(planet);
+            info.appendChild(episodios);
             card.appendChild(info);
             cards.appendChild(card);
 
@@ -78,7 +90,26 @@ window.addEventListener('load', () => {
     };
 
     function limpiarHTML() {
-        cards.innerHTML = ''
+        cards.innerHTML = '';
     };
 
+    function validarFormulario(e) {
+
+        if (e.target.value.length > 0) {
+            let name = e.target.value;
+            name = name.toLowerCase();
+            nombreInput.classList.remove('validado-red');
+            nombreInput.classList.add('validado-green');
+            callButton.disabled = false;
+
+            callButton.addEventListener('click', () => {
+                llamarPersonajes(name);
+            })
+
+        } else {
+            nombreInput.classList.remove('validado-green');
+            nombreInput.classList.add('validado-red');
+        }
+
+    };
 });
