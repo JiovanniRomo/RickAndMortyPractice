@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-
     //Referencias al DOM
     const cards = document.querySelector('.cards');
     const callButton = document.querySelector('#llamado');
@@ -52,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${personaje.image}" alt="${personaje.name}" />
                 <h2>${personaje.name}</h2>
                 <p>${personaje.status}</p>
-                <p>Specie:  ${personaje.specie}</p>
-                <p>Livens in: ${planeta}</p>
+                <p>Specie: ${personaje.species}</p>
+                <p>Lives in: ${planeta}</p>
                 <p>Have been in ${episode.length} episodes</p>
             `;
 
