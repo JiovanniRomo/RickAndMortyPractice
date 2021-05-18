@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Referencias al DOM
     const cards = document.querySelector('.cards');
     const callButton = document.querySelector('#llamado');
-    // const deleteHTML = document.querySelector('#borrarLlamado');
+    const deleteHTML = document.querySelector('#borrarLlamado');
     const nombreInput = document.querySelector('.formulario--input #nombre');
     
     callButton.disabled = true;
@@ -13,13 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarListeners();
 
     function cargarListeners() {
-        // callButton.addEventListener('click', () => {
-        //     llamadoPersonajes();
-        // });
 
-        // deleteHTML.addEventListener('click', () => {
-        //     limpiarHTML();
-        // });
+        deleteHTML.addEventListener('click', () => {
+            limpiarHTML();
+        });
 
         nombreInput.addEventListener('blur', validarFormulario);
     };
@@ -27,13 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //Peticion a la API
     const llamarPersonajes = async (name) => {
 
-        console.log(name);
-
         //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
         const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
         crearCard(personajes);
-        // console.log(personajes);
-
     };
 
 
@@ -44,16 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
         personajes.map(personaje => {
 
             const { location: { name: planeta }, episode } = personaje;
-            // const {episode} = personaje;
 
             //crear el contenedor padre card
             const card = document.createElement('div');
             card.classList.add('card');
-
-            //Crear la imagen del personaje
-            const img = document.createElement('img');
-            img.src = personaje.image;
-            img.alt = personaje.name;
 
             //Crear el contenedor de informacion del personaje
             const info = document.createElement('div');
@@ -61,28 +48,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             //Creando y asignando la info de cada personaje
-            const h2 = document.createElement('h2');
-            h2.textContent = personaje.name;
+            info.innerHTML = `
+                <img src="${personaje.image}" alt="${personaje.name}" />
+                <h2>${personaje.name}</h2>
+                <p>${personaje.status}</p>
+                <p>Specie:  ${personaje.specie}</p>
+                <p>Livens in: ${planeta}</p>
+                <p>Have been in ${episode.length} episodes</p>
+            `;
 
-            const status = document.createElement('p');
-            status.textContent = `Status: ${personaje.status}`;
-
-            const specie = document.createElement('p');
-            specie.textContent = `Specie: ${personaje.species}`
-
-            const planet = document.createElement('p');
-            planet.textContent = `Lives in: ${planeta}`
-
-            const episodios = document.createElement('p');
-            episodios.textContent = `Ha aparecido en: ${episode.length} episodios`
 
             //Agregar los nodos al padre
-            card.appendChild(img);
-            info.appendChild(h2);
-            info.appendChild(status);
-            info.appendChild(specie);
-            info.appendChild(planet);
-            info.appendChild(episodios);
             card.appendChild(info);
             cards.appendChild(card);
 
@@ -104,12 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             callButton.addEventListener('click', () => {
                 llamarPersonajes(name);
-            })
+            });
 
         } else {
             nombreInput.classList.remove('validado-green');
             nombreInput.classList.add('validado-red');
-        }
-
+        };
     };
 });

@@ -42,7 +42,13 @@ main h1 {
 }
 
 .formulario {
+  display: flex;
+  align-items: center;
   margin-top: 20px;
+}
+
+.formulario input[type="text"] {
+  height: 35px;
 }
 
 .cards {
@@ -81,4 +87,13 @@ main h1 {
 
 .validado-red {
   border: 1px solid red;
+}
+
+.btn {
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.btn:hover {
+  opacity: 0.8;
 }
