@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const callButton = document.querySelector('#llamado');
     const deleteHTML = document.querySelector('#borrarLlamado');
     const nombreInput = document.querySelector('.formulario--input #nombre');
-    
+    const personajeInput = document.querySelector('#personajeInput');
+
+    console.log(personajeInput);
+
     callButton.disabled = true;
 
     //listeners 
@@ -27,6 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
         crearCard(personajes);
     };
+
+    const llamarPersonajesForm = async () => {
+        const { data: { results } } = await axios.get(`https://rickandmortyapi.com/api/character`);
+        console.log(results);
+
+        results.forEach(character => {
+            const {name} = character;
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            personajeInput.appendChild(option);
+
+            console.log(name);
+        });
+    }
+
+    llamarPersonajesForm();
 
 
     //Mostrar resultados en el HTML
