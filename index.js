@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //Rellena las opciones por defecto del input select
     const cargarPersonajesForm = async () => {
         const { data: { results } } = await axios.get(`https://rickandmortyapi.com/api/character`);
-        console.log(results);
 
         results.forEach(character => {
             const { name } = character;
@@ -62,6 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
         personajes.map(personaje => {
 
             const { location: { name: planeta }, episode } = personaje;
+
+
+            /*
+                TODO: Guardar el personaje en localStorage y mostrarlo si el usuario recarga la pagina
+            */
+           
+            const savePersonaje = JSON.stringify(personaje);
+            localStorage.setItem('personaje', JSON.stringify(savePersonaje));
 
             //crear el contenedor padre card
             const card = document.createElement('div');
