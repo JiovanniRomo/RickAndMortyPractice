@@ -19,10 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         nombreInput.addEventListener('blur', validarFormulario);
+
+        personajeInput.addEventListener('blur', (e) => {
+            callButton.disabled = false; 
+            console.log(e.target.value);   
+            llamarPersonajes(e.target.value); 
+        });
     };
 
     //Peticion a la API
     const llamarPersonajes = async (name) => {
+
+        //Limpiamos el HTML en caso de que el usuario haya consultado un personaje antes
+        limpiarHTML();
 
         //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
         const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
@@ -90,8 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.value.length > 0) {
             let name = e.target.value;
             name = name.toLowerCase();
-            nombreInput.classList.remove('validado-red');
-            nombreInput.classList.add('validado-green');
+            e.target.classList.remove('validado-red');
+            e.target.classList.add('validado-green');
             callButton.disabled = false;
 
             callButton.addEventListener('click', () => {
@@ -99,8 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         } else {
-            nombreInput.classList.remove('validado-green');
-            nombreInput.classList.add('validado-red');
+            e.target.classList.remove('validado-green');
+            e.target.classList.add('validado-red');
         };
     };
 });
