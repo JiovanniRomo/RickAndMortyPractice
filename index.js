@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     callButton.disabled = true;
 
+    //Llenamos las opciones del personajeInput por si el usuario busca un personaje comun 
+    cargarPersonajesForm();
+
+
     //listeners 
     cargarListeners();
 
@@ -21,9 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
         nombreInput.addEventListener('blur', validarFormulario);
 
         personajeInput.addEventListener('blur', (e) => {
-            callButton.disabled = false; 
-            console.log(e.target.value);   
-            llamarPersonajes(e.target.value); 
+            callButton.disabled = false;
+            console.log(e.target.value);
+            llamarPersonajes(e.target.value);
         });
     };
 
@@ -33,13 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
         //Limpiamos el HTML en caso de que el usuario haya consultado un personaje antes
         limpiarHTML();
 
+        //Cuando el usuario realiza una busqueda, guardamos el nombre en el localStorage para que no se pierda si cierra la pagina
+        localStorage.setItem('personaje', name);
+
         //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
         const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
         crearCard(personajes);
     };
 
     //Rellena las opciones por defecto del input select
-    const cargarPersonajesForm = async () => {
+    async function cargarPersonajesForm() {
         const { data: { results } } = await axios.get(`https://rickandmortyapi.com/api/character`);
 
         results.forEach(character => {
@@ -51,7 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    cargarPersonajesForm();
+    //Si el usuario realizo una busqueda, traemos ese personaje y lo volvemos a mostrar
+    const personajeStorage = localStorage.getItem('personaje');
+    if(personajeStorage) {
+        llamarPersonajes(personajeStorage);
+    };
 
 
     //Mostrar resultados en el HTML
@@ -61,14 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         personajes.map(personaje => {
 
             const { location: { name: planeta }, episode } = personaje;
-
-
-            /*
-                TODO: Guardar el personaje en localStorage y mostrarlo si el usuario recarga la pagina
-            */
-           
-            const savePersonaje = JSON.stringify(personaje);
-            localStorage.setItem('personaje', JSON.stringify(savePersonaje));
 
             //crear el contenedor padre card
             const card = document.createElement('div');
@@ -99,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function limpiarHTML() {
         cards.innerHTML = '';
+
+        //Si el usuario busca otro personaje o limpia la busqueda, eliminamos la busqueda anterior del localStorage
+        localStorage.removeItem('personaje');
     };
 
     function validarFormulario(e) {
@@ -120,3 +126,4 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     };
 });
+
