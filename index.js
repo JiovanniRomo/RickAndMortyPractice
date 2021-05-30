@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteHTML = document.querySelector('#borrarLlamado');
     const nombreInput = document.querySelector('.formulario--input #nombre');
     const personajeInput = document.querySelector('#personajeInput');
+    const formulario = document.querySelector('.formulario--input');
 
     callButton.disabled = true;
 
@@ -25,9 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
         nombreInput.addEventListener('blur', validarFormulario);
 
         personajeInput.addEventListener('blur', (e) => {
+            const personajeBusqueda = e.target.value;
             callButton.disabled = false;
-            console.log(e.target.value);
-            llamarPersonajes(e.target.value);
+
+            callButton.addEventListener('click', () => {
+                llamarPersonajes(personajeBusqueda);
+            });
         });
     };
 
@@ -38,11 +42,32 @@ document.addEventListener('DOMContentLoaded', () => {
         limpiarHTML();
 
         //Cuando el usuario realiza una busqueda, guardamos el nombre en el localStorage para que no se pierda si cierra la pagina
-        localStorage.setItem('personaje', name);
 
-        //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
-        const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
-        crearCard(personajes);
+
+        try {
+            //Llamada a la API utilizando async/await. Extraemos la data y de ahi extraemos los results (los obj con los personajes) y renombramos la variable
+            const { data: { results: personajes } } = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
+            if (personajes) {
+                crearCard(personajes);
+                localStorage.setItem('personaje', name);
+            };
+
+        } catch (error) {
+            generarError(error);
+        }
+    };
+
+    //Funcion para informar de un error al usuario
+    function generarError(error) {
+
+        limpiarHTML();
+
+        const divError = document.createElement('div');
+        const errorMensaje = document.createElement('p');
+        errorMensaje.textContent = error;
+        divError.appendChild(errorMensaje);
+
+        cards.appendChild(divError);
     };
 
     //Rellena las opciones por defecto del input select
@@ -60,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Si el usuario realizo una busqueda, traemos ese personaje y lo volvemos a mostrar
     const personajeStorage = localStorage.getItem('personaje');
-    if(personajeStorage) {
+    if (personajeStorage) {
         llamarPersonajes(personajeStorage);
     };
 
@@ -105,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Si el usuario busca otro personaje o limpia la busqueda, eliminamos la busqueda anterior del localStorage
         localStorage.removeItem('personaje');
+        formulario.reset();
     };
 
     function validarFormulario(e) {
@@ -125,5 +151,5 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.classList.add('validado-red');
         };
     };
-});
 
+});
